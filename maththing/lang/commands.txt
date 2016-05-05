@@ -3,3 +3,5 @@ loop
 function
 skip
 set
+import
+class

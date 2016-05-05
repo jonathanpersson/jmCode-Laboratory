@@ -53,6 +53,30 @@ Namespace My
                 Return defaultInstance
             End Get
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute(",")>  _
+        Public Property decimalSeparator() As Char
+            Get
+                Return CType(Me("decimalSeparator"),Char)
+            End Get
+            Set
+                Me("decimalSeparator") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property askOnStart() As Boolean
+            Get
+                Return CType(Me("askOnStart"),Boolean)
+            End Get
+            Set
+                Me("askOnStart") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

@@ -149,6 +149,12 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Project.vb" />
+    <Compile Include="setDecimalSep.Designer.vb">
+      <DependentUpon>setDecimalSep.vb</DependentUpon>
+    </Compile>
+    <Compile Include="setDecimalSep.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Syntax.vb" />
   </ItemGroup>
   <ItemGroup>
@@ -170,6 +176,9 @@
     <EmbeddedResource Include="forms\SaveFile.resx">
       <DependentUpon>SaveFile.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="setDecimalSep.resx">
+      <DependentUpon>setDecimalSep.vb</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="maththing_TemporaryKey.pfx" />
@@ -186,6 +195,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="lang\classvariables.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="lang\functions.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

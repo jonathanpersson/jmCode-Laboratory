@@ -19,6 +19,10 @@
     Public Shared commentStart As String = "//"
     Public Shared commentColor As Color = Color.Green
 
+    'Class variables
+    Public Shared classVar As New List(Of String)
+    Public Shared classVarColor As Color = Color.Magenta
+
     'Add more
 
     'Things

@@ -8,10 +8,16 @@
     Dim funcList As New ArrayList
     Dim funcArgList As New ArrayList
 
+    'Classes
+    Dim classList As New ArrayList
+
     Dim isExecuting As Boolean = False
     Dim waitLines As Integer = 0
 
     Private Sub CodePad_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        If My.Settings.askOnStart = True Then
+            setDecimalSep.ShowDialog()
+        End If
         loadSyntax()
         'setTheme()
         getCodeStats()
@@ -74,9 +80,14 @@
         For Each line As String In IO.File.ReadAllLines("lang\svl.txt")
             Syntax.svlList.Add(line)
         Next
+
+        'Load class variables
+        For Each line As String In IO.File.ReadAllLines("lang\classvariables.txt")
+            Syntax.classVar.Add(line)
+        Next
     End Sub
 
-    Private Sub highlightSyntax()
+    Private Sub highlightSyntax() 'Rewrite this
         If Syntax.doHighlightning = True Then
 
             If codeRTB.Text.Length > 0 Then
@@ -118,6 +129,17 @@
                     Loop
                 Next
 
+                'Class variables
+                For Each word As String In Syntax.classVar
+                    Dim pos As Integer = 0
+                    Do While codeRTB.Text.ToUpper.IndexOf(word.ToUpper, pos) >= 0
+                        pos = codeRTB.Text.ToUpper.IndexOf(word.ToUpper, pos)
+                        codeRTB.Select(pos, word.Length)
+                        codeRTB.SelectionColor = Syntax.classVarColor
+                        pos += 1
+                    Loop
+                Next
+
                 codeRTB.SelectionStart = selectStart
                 codeRTB.DeselectAll()
             End If
@@ -143,7 +165,7 @@
                         Dim arg As String = findArgs(line)
                         Dim argList As New List(Of String)
                         argList = getArgs(arg)
-                        getCommand(cmd, argList, arg)
+                        getCommand(cmd.ToLower, argList, arg)
                         lineCount += 1
                     Catch ex As Exception
                         Print("[ERROR] Invalid syntax on line " & lineCount & "! Skipping line...")
@@ -180,7 +202,7 @@
         Return arg
     End Function
 
-    Private Sub getCommand(ByVal cmd As String, ByVal arg As List(Of String), ByVal oArg As String)
+    Private Sub getCommand(ByVal cmd As String, ByVal arg As List(Of String), ByVal oArg As String) 'Rewrite this a bit
         Dim op As Char = ""
         op = getOperator(oArg)
 
@@ -192,7 +214,7 @@
                 Print(oArg & " = " & calc(arg))
             Case "sqrt"
                 sqrt(arg)
-            Case "loop(calc)"
+            Case "loop(calc)" 'Completely rewrite
                 doLoop(arg, oArg)
             Case "function"
                 defFunc(arg)
@@ -200,6 +222,10 @@
                 waitLines = oArg
             Case "set"
                 setVar(arg)
+            Case "class"
+
+            Case "import"
+                importClass(oArg)
             Case Else
                 If funcList.Contains(cmd) Then
                     getFunc(cmd, arg)
@@ -246,7 +272,7 @@
                 Return arg
             ElseIf Syntax.svList.Contains(arg) Then
                 Dim indexNum As Integer = Syntax.svList.IndexOf(arg)
-                Return Syntax.svlList.Item(indexNum)
+                Return Syntax.svlList.Item(indexNum).Replace(",", My.Settings.decimalSeparator)
             Else
                 Dim indexNum As Integer = varList.IndexOf(arg)
                 Return valList.Item(indexNum)
@@ -309,6 +335,34 @@
             Else
                 Print("[ERROR] Invalid syntax! Set command arguments must be 1 or > 2! Skipping line...")
             End If
+        End If
+    End Sub
+
+    Private Sub importClass(ByVal Arg As String) 'Fix stuff
+        Dim className As String
+        Dim finishedImport As Boolean = False
+
+        If My.Computer.FileSystem.FileExists(Arg) = False Then
+            Print("[ERROR] Class '" & Arg & "' could not be found! Skipping line...")
+        Else
+            finishedImport = True
+            While finishedImport = True
+                For Each line As String In IO.File.ReadAllLines(Arg)
+                    If getCmd(line).ToString.ToLower = "class" Then
+                        Dim argList As List(Of String) = getArgs(line.Replace(getCmd(line.Replace(" ", "")) & Syntax.lineStarter, "").Replace(Syntax.lineEnder, ""))
+                        className = argList.Item(0)
+                        finishedImport = False
+                    Else
+
+                    End If
+                Next
+            End While
+        End If
+
+        If className IsNot Nothing Then
+            classList.Add(className)
+            classList.Add(Arg)
+            Print("Class '" & className & "' added!")
         End If
     End Sub
 
