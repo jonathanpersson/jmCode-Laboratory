@@ -156,6 +156,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Syntax.vb" />
+    <Compile Include="Variables.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="forms\About.resx">

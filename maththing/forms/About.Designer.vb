@@ -27,6 +27,7 @@ Partial Class About
         Me.appVerLabel = New System.Windows.Forms.Label()
         Me.langVerLabel = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
+        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -57,16 +58,16 @@ Partial Class About
         Me.appVerLabel.Name = "appVerLabel"
         Me.appVerLabel.Size = New System.Drawing.Size(157, 13)
         Me.appVerLabel.TabIndex = 2
-        Me.appVerLabel.Text = "Application Version: Alpha 0.3.1"
+        Me.appVerLabel.Text = "Application Version: Alpha 0.3.2"
         '
         'langVerLabel
         '
         Me.langVerLabel.AutoSize = True
         Me.langVerLabel.Location = New System.Drawing.Point(216, 69)
         Me.langVerLabel.Name = "langVerLabel"
-        Me.langVerLabel.Size = New System.Drawing.Size(132, 13)
+        Me.langVerLabel.Size = New System.Drawing.Size(123, 13)
         Me.langVerLabel.TabIndex = 3
-        Me.langVerLabel.Text = "Language Version: 0.2.3.1"
+        Me.langVerLabel.Text = "Language Version: 0.2.4"
         '
         'Label2
         '
@@ -79,12 +80,23 @@ Partial Class About
     "rogram or would like to report a bug, " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "you can contact me via email here: " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "jon" &
     "athan_persson@outlook.com"
         '
+        'LinkLabel1
+        '
+        Me.LinkLabel1.AutoSize = True
+        Me.LinkLabel1.Location = New System.Drawing.Point(372, 195)
+        Me.LinkLabel1.Name = "LinkLabel1"
+        Me.LinkLabel1.Size = New System.Drawing.Size(40, 13)
+        Me.LinkLabel1.TabIndex = 5
+        Me.LinkLabel1.TabStop = True
+        Me.LinkLabel1.Text = "GitHub"
+        '
         'About
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
         Me.ClientSize = New System.Drawing.Size(421, 217)
+        Me.Controls.Add(Me.LinkLabel1)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.langVerLabel)
         Me.Controls.Add(Me.appVerLabel)
@@ -107,4 +119,5 @@ Partial Class About
     Friend WithEvents appVerLabel As Label
     Friend WithEvents langVerLabel As Label
     Friend WithEvents Label2 As Label
+    Friend WithEvents LinkLabel1 As LinkLabel
 End Class

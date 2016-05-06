@@ -1,18 +1,18 @@
 ﻿Public Class CodePad
 
-    'Variables
-    Dim varList As New ArrayList
-    Dim valList As New ArrayList
-
     'Functions
     Dim funcList As New ArrayList
     Dim funcArgList As New ArrayList
 
     'Classes
-    Dim classList As New ArrayList
+    Dim classList As New List(Of String)
 
     Dim isExecuting As Boolean = False
     Dim waitLines As Integer = 0
+
+    Dim isLooping As Boolean = False
+    Dim loopCycles As Long = 0
+    Dim loopStartIndex As Long = 0
 
     Private Sub CodePad_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         If My.Settings.askOnStart = True Then
@@ -56,7 +56,6 @@
     End Sub
 
     Private Sub loadSyntax()
-        'Make this load syntax from file later
         'Load Keywords
         For Each line As String In IO.File.ReadAllLines("lang\commands.txt")
             Syntax.commandList.Add(line)
@@ -157,18 +156,39 @@
         varLB.Items.Clear()
 
         While isExecuting = True 'Rewrite this a bit
-            Dim lineCount As Integer = 1
-            For Each line As String In codeRTB.Lines()
+            For i = 0 To codeRTB.Lines.Count - 1
+                Dim line As String = codeRTB.Lines(i)
                 If waitLines = 0 Then
                     Try
-                        Dim cmd As String = getCmd(line)
-                        Dim arg As String = findArgs(line)
+                        Dim cmd As String = getCmd(line).ToString.ToLower
+                        Dim arg As String
                         Dim argList As New List(Of String)
-                        argList = getArgs(arg)
-                        getCommand(cmd.ToLower, argList, arg)
-                        lineCount += 1
+
+                        If cmd = "end" Then
+
+                        Else
+                            arg = findArgs(line)
+                            argList = getArgs(arg)
+                        End If
+
+                        If cmd = "loop" Then loopStartIndex = i
+
+                        If isLooping = True Then
+                            If cmd = "end" Then
+                                loopCycles -= 1
+                                If loopCycles = 0 Then
+                                    isLooping = False
+                                Else
+                                    i = loopStartIndex
+                                End If
+                            Else
+                                getCommand(cmd, argList, arg)
+                            End If
+                        Else
+                            getCommand(cmd, argList, arg)
+                        End If
                     Catch ex As Exception
-                        Print("[ERROR] Invalid syntax on line " & lineCount & "! Skipping line...")
+                        Print("[ERROR] Invalid syntax on line " & i + 1 & "! Skipping line...")
                         Print("[ERROR - VB OUTPUT] " & ex.Message)
                         'ADD : Option to push VB errors as message boxes.
                     End Try
@@ -180,8 +200,7 @@
         End While
 
         'Clear variables
-        varList.Clear()
-        valList.Clear()
+        Variables.VarList.Clear()
 
         'Clear functions
         funcList.Clear()
@@ -214,8 +233,10 @@
                 Print(oArg & " = " & calc(arg))
             Case "sqrt"
                 sqrt(arg)
-            Case "loop(calc)" 'Completely rewrite
-                doLoop(arg, oArg)
+            Case "loop" 'Start loop
+                doLoop(arg)
+            Case "end" 'End loop
+
             Case "function"
                 defFunc(arg)
             Case "skip"
@@ -274,8 +295,7 @@
                 Dim indexNum As Integer = Syntax.svList.IndexOf(arg)
                 Return Syntax.svlList.Item(indexNum).Replace(",", My.Settings.decimalSeparator)
             Else
-                Dim indexNum As Integer = varList.IndexOf(arg)
-                Return valList.Item(indexNum)
+                Return Variables.VarList.Item(arg)
             End If
         End If
     End Function
@@ -301,37 +321,31 @@
 
     Private Sub def(ByVal arg As List(Of String)) 'rewrite this to support inputting equations.
         Dim var As String = arg.Item(0)
-        If varList.Contains(var) Then
+        If Variables.VarList.ContainsKey(var) Then
             Print("[ERROR] Variable '" & var & "' already exists. Skipping line...")
         Else
             arg.RemoveAt(1)
             arg.RemoveAt(0)
             If arg.Count = 1 Then
-                varList.Add(var)
-                valList.Add(arg.Item(0))
+                Variables.VarList.Add(var, arg.Item(0))
             ElseIf arg.Count > 2 Then
-                varList.Add(var)
-                valList.Add(calc(arg))
+                Variables.VarList.Add(var, calc(arg))
             Else
                 Print("[ERROR] Invalid syntax! Def command arguments must be 1 or > 2! Skipping line...")
             End If
-
-            varLB.Items.Add(varList.Item(varList.Count - 1) & " = " & valList.Item(valList.Count - 1))
+            varLB.Items.Add(var & " = " & Variables.VarList.Item(var))
         End If
     End Sub
 
-    Private Sub setVar(ByVal arg As List(Of String))
-        If varList.Contains(arg.Item(0)) Then
-            Dim varIndex = varList.IndexOf(arg.Item(0))
+    Private Sub setVar(ByVal arg As List(Of String)) 'Fix this
+        If Variables.VarList.ContainsKey(arg.Item(0)) Then
             Dim var = arg.Item(0)
             arg.RemoveAt(1)
             arg.RemoveAt(0)
             If arg.Count = 1 Then
-                valList.Item(varList.IndexOf(arg.Item(0))) = arg.Item(0)
-                Print("Variable '" & var & "' changed!")
+                Variables.VarList.Item(var) = arg.Item(0)
             ElseIf arg.Count > 2 Then
-                valList.Item(varIndex) = calc(arg)
-                Print("Variable '" & var & "' changed!")
+                Variables.VarList.Item(var) = calc(arg)
             Else
                 Print("[ERROR] Invalid syntax! Set command arguments must be 1 or > 2! Skipping line...")
             End If
@@ -345,13 +359,12 @@
         If My.Computer.FileSystem.FileExists(Arg) = False Then
             Print("[ERROR] Class '" & Arg & "' could not be found! Skipping line...")
         Else
-            finishedImport = True
-            While finishedImport = True
+            While finishedImport = False
                 For Each line As String In IO.File.ReadAllLines(Arg)
                     If getCmd(line).ToString.ToLower = "class" Then
                         Dim argList As List(Of String) = getArgs(line.Replace(getCmd(line.Replace(" ", "")) & Syntax.lineStarter, "").Replace(Syntax.lineEnder, ""))
                         className = argList.Item(0)
-                        finishedImport = False
+                        finishedImport = True
                     Else
 
                     End If
@@ -366,9 +379,23 @@
         End If
     End Sub
 
-    Private Sub doLoop(ByVal arg As List(Of String), ByVal oArg As String)
-        'Fix this.
-        'Make user able to select custom length.
+    Private Sub doLoop(ByVal arg As List(Of String))
+        If arg.Count = 1 Then
+            Dim n As Double = arg.Item(0)
+            n = Math.Round(n, 0)
+            Print(n)
+            If n = 0 Then n = 1
+            loopCycles = n
+            isLooping = True
+        ElseIf arg.Count > 2 Then
+            Dim n As Double = calc(arg)
+            n = Math.Round(n, 0)
+            If n = 0 Then n = 1
+            loopCycles = n
+            isLooping = True
+        Else
+            Print("[ERROR] Invalid syntax! Loop command arguments must be 1 or > 2! Skipping line...")
+        End If
     End Sub
 
     Private Function calc(ByVal arg As List(Of String)) 'Add modulus support later
