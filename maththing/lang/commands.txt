@@ -1,6 +1,6 @@
 ﻿def
 loop
-end
+endloop
 function
 skip
 set

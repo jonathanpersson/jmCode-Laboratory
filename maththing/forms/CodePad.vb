@@ -1,11 +1,10 @@
 ﻿Public Class CodePad
 
     'Functions
-    Dim funcList As New ArrayList
-    Dim funcArgList As New ArrayList
+    Dim funcList As New Dictionary(Of String, String)
 
     'Classes
-    Dim classList As New List(Of String)
+    Dim classList As New Dictionary(Of String, String)
 
     Dim isExecuting As Boolean = False
     Dim waitLines As Integer = 0
@@ -164,7 +163,7 @@
                         Dim arg As String
                         Dim argList As New List(Of String)
 
-                        If cmd = "end" Then
+                        If cmd = "endloop" Then
 
                         Else
                             arg = findArgs(line)
@@ -174,7 +173,7 @@
                         If cmd = "loop" Then loopStartIndex = i
 
                         If isLooping = True Then
-                            If cmd = "end" Then
+                            If cmd = "endloop" Then
                                 loopCycles -= 1
                                 If loopCycles = 0 Then
                                     isLooping = False
@@ -204,7 +203,6 @@
 
         'Clear functions
         funcList.Clear()
-        funcArgList.Clear()
 
         Print("CODE EXECUTION FINISHED")
     End Sub
@@ -235,8 +233,6 @@
                 sqrt(arg)
             Case "loop" 'Start loop
                 doLoop(arg)
-            Case "end" 'End loop
-
             Case "function"
                 defFunc(arg)
             Case "skip"
@@ -248,7 +244,7 @@
             Case "import"
                 importClass(oArg)
             Case Else
-                If funcList.Contains(cmd) Then
+                If funcList.ContainsKey(cmd) Then
                     getFunc(cmd, arg)
                 Else
                     Print("[ERROR] Command: '" & cmd & "' is invalid! Skipping line...")
@@ -373,8 +369,7 @@
         End If
 
         If className IsNot Nothing Then
-            classList.Add(className)
-            classList.Add(Arg)
+            classList.Add(className, Arg)
             Print("Class '" & className & "' added!")
         End If
     End Sub
@@ -462,14 +457,13 @@
             argStr &= item
         Next
 
-        funcList.Add(funcName)
-        funcArgList.Add(argStr)
+        funcList.Add(funcName.ToLower, argStr)
 
         Print("Added function '" & funcName & "'!")
     End Sub
 
     Private Sub getFunc(ByVal cmd As String, ByVal arg As List(Of String)) 'I know...
-        Dim funcArg As String = funcArgList.Item(funcList.IndexOf(cmd))
+        Dim funcArg As String = funcList.Item(cmd)
         Dim argNum As Double = arg.Item(0)
         funcArg = funcArg.Replace("_", argNum.ToString)
         Print("[" & cmd & "] " & funcArg & " = " & calc(getArgs(funcArg)))
