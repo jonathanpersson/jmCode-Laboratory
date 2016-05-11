@@ -21,7 +21,7 @@
         'setTheme()
         getCodeStats()
         highlightSyntax()
-        stopLoopBtn.Visible = False
+        stopExecBtn.Visible = False
     End Sub
 
     Private Sub openScript()
@@ -149,6 +149,8 @@
     End Sub
 
     Private Sub execLoop() 'Main loop for the interpreter, this wil read code line by line and execute it.
+        stopExecBtn.Visible = True
+
         Print("STARTING CODE EXECUTION")
 
         'Clear variable listbox
@@ -156,43 +158,48 @@
 
         While isExecuting = True 'Rewrite this a bit
             For i = 0 To codeRTB.Lines.Count - 1
+                Application.DoEvents()
+
+                If isExecuting = False Then i = codeRTB.Lines.Count - 1
+
                 Dim line As String = codeRTB.Lines(i)
                 If waitLines = 0 Then
+
                     Try
-                        Dim cmd As String = getCmd(line).ToString.ToLower
-                        Dim arg As String
-                        Dim argList As New List(Of String)
+                            Dim cmd As String = getCmd(line).ToString.ToLower
+                            Dim arg As String
+                            Dim argList As New List(Of String)
 
-                        If cmd = "endloop" Then
-
-                        Else
-                            arg = findArgs(line)
-                            argList = getArgs(arg)
-                        End If
-
-                        If cmd = "loop" Then loopStartIndex = i
-
-                        If isLooping = True Then
                             If cmd = "endloop" Then
-                                loopCycles -= 1
-                                If loopCycles = 0 Then
-                                    isLooping = False
-                                Else
-                                    i = loopStartIndex
-                                End If
+
                             Else
-                                getCommand(cmd, argList, arg)
+                                arg = findArgs(line)
+                                argList = getArgs(arg)
                             End If
-                        Else
-                            getCommand(cmd, argList, arg)
+
+                            If cmd = "loop" Then loopStartIndex = i
+
+                            If isLooping = True Then
+                                If cmd = "endloop" Then
+                                    loopCycles -= 1
+                                    If loopCycles = 0 Then
+                                        isLooping = False
+                                    Else
+                                        i = loopStartIndex
+                                    End If
+                                Else
+                                execCommand(cmd, argList, arg)
+                            End If
+                            Else
+                            execCommand(cmd, argList, arg)
                         End If
-                    Catch ex As Exception
-                        Print("[ERROR] Invalid syntax on line " & i + 1 & "! Skipping line...")
-                        Print("[ERROR - VB OUTPUT] " & ex.Message)
-                        'ADD : Option to push VB errors as message boxes.
-                    End Try
-                Else
-                    waitLines -= 1
+                        Catch ex As Exception
+                            Print("[ERROR] Invalid syntax on line " & i + 1 & "! Skipping line...")
+                            Print("[ERROR - VB OUTPUT] " & ex.Message)
+                            'ADD : Option to push VB errors as message boxes.
+                        End Try
+                    Else
+                        waitLines -= 1
                 End If
             Next
             isExecuting = False
@@ -204,7 +211,12 @@
         'Clear functions
         funcList.Clear()
 
+        'Clear classes
+        classList.Clear()
+
         Print("CODE EXECUTION FINISHED")
+
+        stopExecBtn.Visible = False
     End Sub
 
     Private Function getCmd(ByVal line As String)
@@ -219,7 +231,7 @@
         Return arg
     End Function
 
-    Private Sub getCommand(ByVal cmd As String, ByVal arg As List(Of String), ByVal oArg As String) 'Rewrite this a bit
+    Private Sub execCommand(ByVal cmd As String, ByVal arg As List(Of String), ByVal oArg As String) 'Rewrite this a bit
         Dim op As Char = ""
         op = getOperator(oArg)
 
@@ -244,8 +256,10 @@
             Case "import"
                 importClass(oArg)
             Case Else
-                If funcList.ContainsKey(cmd) Then
+                If funcList.ContainsKey(cmd) = True Then
                     getFunc(cmd, arg)
+                ElseIf classList.ContainsKey(cmd) = True Then
+                    useClass(cmd, arg)
                 Else
                     Print("[ERROR] Command: '" & cmd & "' is invalid! Skipping line...")
                 End If
@@ -348,7 +362,7 @@
         End If
     End Sub
 
-    Private Sub importClass(ByVal Arg As String) 'Fix stuff
+    Private Sub importClass(ByVal Arg As String)
         Dim className As String
         Dim finishedImport As Boolean = False
 
@@ -368,17 +382,45 @@
             End While
         End If
 
-        If className IsNot Nothing Then
-            classList.Add(className, Arg)
-            Print("Class '" & className & "' added!")
+        className = className.Replace(" ", "") 'Make sure there are no spaces in className
+
+
+        If className IsNot Nothing Then 'Try adding className to classList
+            classList.Add(className.ToLower, Arg)
+            If classList.ContainsKey(className) Then
+                Print("Class '" & className & "' added!")
+            Else
+                Print("[ERROR] Failed to add '" & className & "'! An unexpected error occured.")
+            End If
+        Else
+            Print("[ERROR] Failed to add class ' " & Arg & "'! No className is declared. Skipping line...")
         End If
+    End Sub
+
+    Private Sub useClass(ByVal className As String, ByVal arg As List(Of String))
+        Dim sArg As Double 'Argument sent to class
+
+        'Get sArg
+        If arg.Count = 1 Then
+            sArg = getNum(arg.Item(0))
+        ElseIf arg.Count > 2 Then
+            sArg = calc(arg)
+        Else
+            Print("[ERROR] Invalid syntax! Class argument needs to be 1 or > 2! Skipping line...")
+        End If
+
+        For Each line As String In IO.File.ReadAllLines(classList.Item(className)) 'Loop through class
+            Dim cmd As String = getCmd(line)
+            Dim oArg As String = findArgs(line).replace("[input]", sArg)
+            Dim cArg As List(Of String) = getArgs(oArg)
+            execCommand(cmd, cArg, oArg) 'Create execCommand specific for classes
+        Next
     End Sub
 
     Private Sub doLoop(ByVal arg As List(Of String))
         If arg.Count = 1 Then
             Dim n As Double = arg.Item(0)
             n = Math.Round(n, 0)
-            Print(n)
             If n = 0 Then n = 1
             loopCycles = n
             isLooping = True
@@ -474,8 +516,9 @@
         execLoop()
     End Sub
 
-    Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles stopLoopBtn.Click
+    Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles stopExecBtn.Click
         isExecuting = False
+        stopExecBtn.Visible = False
     End Sub
 
     Private Sub ExitToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.Click
@@ -506,6 +549,7 @@
 
     Private Sub OpenExecuteToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OpenExecuteToolStripMenuItem.Click
         openScript()
+        isExecuting = True
         execLoop()
     End Sub
 
@@ -561,5 +605,10 @@
     Private Sub WindowToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles WindowToolStripMenuItem1.Click
         Dim wind As New CodePad
         wind.Show()
+    End Sub
+
+    Private Sub ExecuteToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExecuteToolStripMenuItem.Click
+        isExecuting = True
+        execLoop()
     End Sub
 End Class

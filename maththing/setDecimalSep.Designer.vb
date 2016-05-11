@@ -63,9 +63,9 @@ Partial Class setDecimalSep
         Me.CheckBox1.CheckState = System.Windows.Forms.CheckState.Checked
         Me.CheckBox1.Location = New System.Drawing.Point(12, 54)
         Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(96, 17)
+        Me.CheckBox1.Size = New System.Drawing.Size(133, 17)
         Me.CheckBox1.TabIndex = 3
-        Me.CheckBox1.Text = "Ask on Startup"
+        Me.CheckBox1.Text = "Always ask on Launch"
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'setDecimalSep

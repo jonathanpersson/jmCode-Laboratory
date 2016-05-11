@@ -36,6 +36,8 @@ Partial Class CodePad
         Me.varLB = New System.Windows.Forms.ListBox()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
+        Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
+        Me.stopExecBtn = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -66,6 +68,7 @@ Partial Class CodePad
         Me.SyntaxHighlightningToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ProjectToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.WindowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -73,12 +76,7 @@ Partial Class CodePad
         Me.IntroductionToJmCodeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TabControl2 = New System.Windows.Forms.TabControl()
         Me.codeTab = New System.Windows.Forms.TabPage()
-        Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
-        Me.stopLoopBtn = New System.Windows.Forms.ToolStripButton()
-        Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.OptionsToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ToolStripMenuItem2 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ExecuteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.StatusStrip1.SuspendLayout()
         Me.ConsolePanel.SuspendLayout()
         Me.TabControl3.SuspendLayout()
@@ -94,8 +92,9 @@ Partial Class CodePad
         '
         'StatusStrip1
         '
+        Me.StatusStrip1.ImageScalingSize = New System.Drawing.Size(24, 24)
         Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.lineCountLabel})
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 498)
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 484)
         Me.StatusStrip1.Name = "StatusStrip1"
         Me.StatusStrip1.Size = New System.Drawing.Size(731, 22)
         Me.StatusStrip1.TabIndex = 0
@@ -115,7 +114,7 @@ Partial Class CodePad
         Me.codeRTB.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.codeRTB.Location = New System.Drawing.Point(3, 3)
         Me.codeRTB.Name = "codeRTB"
-        Me.codeRTB.Size = New System.Drawing.Size(527, 279)
+        Me.codeRTB.Size = New System.Drawing.Size(527, 259)
         Me.codeRTB.TabIndex = 1
         Me.codeRTB.Text = ""
         Me.codeRTB.WordWrap = False
@@ -124,7 +123,7 @@ Partial Class CodePad
         '
         Me.ConsolePanel.Controls.Add(Me.TabControl3)
         Me.ConsolePanel.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.ConsolePanel.Location = New System.Drawing.Point(0, 360)
+        Me.ConsolePanel.Location = New System.Drawing.Point(0, 346)
         Me.ConsolePanel.Name = "ConsolePanel"
         Me.ConsolePanel.Size = New System.Drawing.Size(731, 138)
         Me.ConsolePanel.TabIndex = 2
@@ -144,7 +143,7 @@ Partial Class CodePad
         Me.TabPage4.Controls.Add(Me.consoleTB)
         Me.TabPage4.Location = New System.Drawing.Point(4, 22)
         Me.TabPage4.Name = "TabPage4"
-        Me.TabPage4.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage4.Padding = New System.Windows.Forms.Padding(3, 3, 3, 3)
         Me.TabPage4.Size = New System.Drawing.Size(723, 112)
         Me.TabPage4.TabIndex = 0
         Me.TabPage4.Text = "Output"
@@ -166,9 +165,9 @@ Partial Class CodePad
         '
         Me.VariablePanel.Controls.Add(Me.TabControl1)
         Me.VariablePanel.Dock = System.Windows.Forms.DockStyle.Right
-        Me.VariablePanel.Location = New System.Drawing.Point(541, 49)
+        Me.VariablePanel.Location = New System.Drawing.Point(541, 55)
         Me.VariablePanel.Name = "VariablePanel"
-        Me.VariablePanel.Size = New System.Drawing.Size(190, 311)
+        Me.VariablePanel.Size = New System.Drawing.Size(190, 291)
         Me.VariablePanel.TabIndex = 3
         '
         'TabControl1
@@ -179,7 +178,7 @@ Partial Class CodePad
         Me.TabControl1.Location = New System.Drawing.Point(0, 0)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(190, 311)
+        Me.TabControl1.Size = New System.Drawing.Size(190, 291)
         Me.TabControl1.TabIndex = 1
         '
         'TabPage1
@@ -187,8 +186,8 @@ Partial Class CodePad
         Me.TabPage1.Controls.Add(Me.varLB)
         Me.TabPage1.Location = New System.Drawing.Point(4, 22)
         Me.TabPage1.Name = "TabPage1"
-        Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage1.Size = New System.Drawing.Size(182, 285)
+        Me.TabPage1.Padding = New System.Windows.Forms.Padding(3, 3, 3, 3)
+        Me.TabPage1.Size = New System.Drawing.Size(182, 265)
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "Variables"
         Me.TabPage1.UseVisualStyleBackColor = True
@@ -201,36 +200,55 @@ Partial Class CodePad
         Me.varLB.FormattingEnabled = True
         Me.varLB.Location = New System.Drawing.Point(2, 0)
         Me.varLB.Name = "varLB"
-        Me.varLB.Size = New System.Drawing.Size(180, 277)
+        Me.varLB.Size = New System.Drawing.Size(180, 264)
         Me.varLB.TabIndex = 0
         '
         'TabPage2
         '
         Me.TabPage2.Location = New System.Drawing.Point(4, 22)
         Me.TabPage2.Name = "TabPage2"
-        Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage2.Size = New System.Drawing.Size(182, 285)
+        Me.TabPage2.Padding = New System.Windows.Forms.Padding(3, 3, 3, 3)
+        Me.TabPage2.Size = New System.Drawing.Size(182, 265)
         Me.TabPage2.TabIndex = 1
         Me.TabPage2.Text = "Project"
         Me.TabPage2.UseVisualStyleBackColor = True
         '
         'ToolStrip1
         '
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.stopLoopBtn, Me.ToolStripSeparator1})
+        Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(24, 24)
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.stopExecBtn, Me.ToolStripSeparator1})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 24)
         Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.Size = New System.Drawing.Size(731, 25)
+        Me.ToolStrip1.Size = New System.Drawing.Size(731, 31)
         Me.ToolStrip1.TabIndex = 4
         Me.ToolStrip1.Text = "ToolStrip1"
+        '
+        'ToolStripButton1
+        '
+        Me.ToolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton1.Image = Global.maththing.My.Resources.Resources.exec_button
+        Me.ToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton1.Name = "ToolStripButton1"
+        Me.ToolStripButton1.Size = New System.Drawing.Size(28, 28)
+        '
+        'stopExecBtn
+        '
+        Me.stopExecBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.stopExecBtn.Image = Global.maththing.My.Resources.Resources.stop_script_button
+        Me.stopExecBtn.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.stopExecBtn.Name = "stopExecBtn"
+        Me.stopExecBtn.Size = New System.Drawing.Size(28, 28)
+        Me.stopExecBtn.Text = "Stop Execution"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 25)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 31)
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.EditToolStripMenuItem, Me.ViewToolStripMenuItem, Me.ProjectToolStripMenuItem, Me.OptionsToolStripMenuItem, Me.ToolsToolStripMenuItem, Me.WindowToolStripMenuItem, Me.HelpToolStripMenuItem})
+        Me.MenuStrip1.ImageScalingSize = New System.Drawing.Size(24, 24)
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.EditToolStripMenuItem, Me.ViewToolStripMenuItem, Me.ProjectToolStripMenuItem, Me.ToolsToolStripMenuItem, Me.WindowToolStripMenuItem, Me.HelpToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.Size = New System.Drawing.Size(731, 24)
@@ -407,6 +425,7 @@ Partial Class CodePad
         '
         'ProjectToolStripMenuItem
         '
+        Me.ProjectToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExecuteToolStripMenuItem})
         Me.ProjectToolStripMenuItem.Name = "ProjectToolStripMenuItem"
         Me.ProjectToolStripMenuItem.Size = New System.Drawing.Size(56, 20)
         Me.ProjectToolStripMenuItem.Text = "Project"
@@ -417,6 +436,12 @@ Partial Class CodePad
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(47, 20)
         Me.ToolsToolStripMenuItem.Text = "Tools"
+        '
+        'ToolStripMenuItem1
+        '
+        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(152, 22)
+        Me.ToolStripMenuItem1.Text = "Options"
         '
         'WindowToolStripMenuItem
         '
@@ -434,7 +459,7 @@ Partial Class CodePad
         'AboutToolStripMenuItem
         '
         Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
-        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
+        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.AboutToolStripMenuItem.Text = "About"
         '
         'HelpToolStripMenuItem1
@@ -442,7 +467,7 @@ Partial Class CodePad
         Me.HelpToolStripMenuItem1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.IntroductionToJmCodeToolStripMenuItem})
         Me.HelpToolStripMenuItem1.Enabled = False
         Me.HelpToolStripMenuItem1.Name = "HelpToolStripMenuItem1"
-        Me.HelpToolStripMenuItem1.Size = New System.Drawing.Size(107, 22)
+        Me.HelpToolStripMenuItem1.Size = New System.Drawing.Size(152, 22)
         Me.HelpToolStripMenuItem1.Text = "Learn"
         '
         'IntroductionToJmCodeToolStripMenuItem
@@ -455,10 +480,10 @@ Partial Class CodePad
         '
         Me.TabControl2.Controls.Add(Me.codeTab)
         Me.TabControl2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TabControl2.Location = New System.Drawing.Point(0, 49)
+        Me.TabControl2.Location = New System.Drawing.Point(0, 55)
         Me.TabControl2.Name = "TabControl2"
         Me.TabControl2.SelectedIndex = 0
-        Me.TabControl2.Size = New System.Drawing.Size(541, 311)
+        Me.TabControl2.Size = New System.Drawing.Size(541, 291)
         Me.TabControl2.TabIndex = 6
         '
         'codeTab
@@ -466,58 +491,24 @@ Partial Class CodePad
         Me.codeTab.Controls.Add(Me.codeRTB)
         Me.codeTab.Location = New System.Drawing.Point(4, 22)
         Me.codeTab.Name = "codeTab"
-        Me.codeTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.codeTab.Size = New System.Drawing.Size(533, 285)
+        Me.codeTab.Padding = New System.Windows.Forms.Padding(3, 3, 3, 3)
+        Me.codeTab.Size = New System.Drawing.Size(533, 265)
         Me.codeTab.TabIndex = 0
         Me.codeTab.Text = "Untitled"
         Me.codeTab.UseVisualStyleBackColor = True
         '
-        'ToolStripMenuItem1
+        'ExecuteToolStripMenuItem
         '
-        Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(152, 22)
-        '
-        'ToolStripButton1
-        '
-        Me.ToolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton1.Image = Global.maththing.My.Resources.Resources.exec_button
-        Me.ToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton1.Name = "ToolStripButton1"
-        Me.ToolStripButton1.Size = New System.Drawing.Size(23, 22)
-        Me.ToolStripButton1.Text = "Execute"
-        '
-        'stopLoopBtn
-        '
-        Me.stopLoopBtn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.stopLoopBtn.Image = Global.maththing.My.Resources.Resources.stop_script_button
-        Me.stopLoopBtn.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.stopLoopBtn.Name = "stopLoopBtn"
-        Me.stopLoopBtn.Size = New System.Drawing.Size(23, 22)
-        Me.stopLoopBtn.Text = "Stop Loop"
-        '
-        'OptionsToolStripMenuItem
-        '
-        Me.OptionsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OptionsToolStripMenuItem1, Me.ToolStripMenuItem2})
-        Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
-        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(61, 20)
-        Me.OptionsToolStripMenuItem.Text = "Options"
-        '
-        'OptionsToolStripMenuItem1
-        '
-        Me.OptionsToolStripMenuItem1.Name = "OptionsToolStripMenuItem1"
-        Me.OptionsToolStripMenuItem1.Size = New System.Drawing.Size(152, 22)
-        Me.OptionsToolStripMenuItem1.Text = "Options"
-        '
-        'ToolStripMenuItem2
-        '
-        Me.ToolStripMenuItem2.Name = "ToolStripMenuItem2"
-        Me.ToolStripMenuItem2.Size = New System.Drawing.Size(152, 22)
+        Me.ExecuteToolStripMenuItem.Image = Global.maththing.My.Resources.Resources.exec_button
+        Me.ExecuteToolStripMenuItem.Name = "ExecuteToolStripMenuItem"
+        Me.ExecuteToolStripMenuItem.Size = New System.Drawing.Size(160, 30)
+        Me.ExecuteToolStripMenuItem.Text = "Execute"
         '
         'CodePad
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(731, 520)
+        Me.ClientSize = New System.Drawing.Size(731, 506)
         Me.Controls.Add(Me.TabControl2)
         Me.Controls.Add(Me.VariablePanel)
         Me.Controls.Add(Me.ConsolePanel)
@@ -558,7 +549,7 @@ Partial Class CodePad
     Friend WithEvents ToolStripButton1 As ToolStripButton
     Friend WithEvents consoleTB As TextBox
     Friend WithEvents varLB As ListBox
-    Friend WithEvents stopLoopBtn As ToolStripButton
+    Friend WithEvents stopExecBtn As ToolStripButton
     Friend WithEvents ToolStripSeparator1 As ToolStripSeparator
     Friend WithEvents MenuStrip1 As MenuStrip
     Friend WithEvents FileToolStripMenuItem As ToolStripMenuItem
@@ -602,7 +593,5 @@ Partial Class CodePad
     Friend WithEvents TabPage4 As TabPage
     Friend WithEvents JmCodeProjectToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem1 As ToolStripMenuItem
-    Friend WithEvents OptionsToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents OptionsToolStripMenuItem1 As ToolStripMenuItem
-    Friend WithEvents ToolStripMenuItem2 As ToolStripMenuItem
+    Friend WithEvents ExecuteToolStripMenuItem As ToolStripMenuItem
 End Class
