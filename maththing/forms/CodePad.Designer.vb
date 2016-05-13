@@ -67,6 +67,7 @@ Partial Class CodePad
         Me.ViewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SyntaxHighlightningToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ProjectToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ExecuteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.WindowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -76,7 +77,6 @@ Partial Class CodePad
         Me.IntroductionToJmCodeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TabControl2 = New System.Windows.Forms.TabControl()
         Me.codeTab = New System.Windows.Forms.TabPage()
-        Me.ExecuteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.StatusStrip1.SuspendLayout()
         Me.ConsolePanel.SuspendLayout()
         Me.TabControl3.SuspendLayout()
@@ -143,7 +143,7 @@ Partial Class CodePad
         Me.TabPage4.Controls.Add(Me.consoleTB)
         Me.TabPage4.Location = New System.Drawing.Point(4, 22)
         Me.TabPage4.Name = "TabPage4"
-        Me.TabPage4.Padding = New System.Windows.Forms.Padding(3, 3, 3, 3)
+        Me.TabPage4.Padding = New System.Windows.Forms.Padding(3)
         Me.TabPage4.Size = New System.Drawing.Size(723, 112)
         Me.TabPage4.TabIndex = 0
         Me.TabPage4.Text = "Output"
@@ -186,7 +186,7 @@ Partial Class CodePad
         Me.TabPage1.Controls.Add(Me.varLB)
         Me.TabPage1.Location = New System.Drawing.Point(4, 22)
         Me.TabPage1.Name = "TabPage1"
-        Me.TabPage1.Padding = New System.Windows.Forms.Padding(3, 3, 3, 3)
+        Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
         Me.TabPage1.Size = New System.Drawing.Size(182, 265)
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "Variables"
@@ -207,7 +207,7 @@ Partial Class CodePad
         '
         Me.TabPage2.Location = New System.Drawing.Point(4, 22)
         Me.TabPage2.Name = "TabPage2"
-        Me.TabPage2.Padding = New System.Windows.Forms.Padding(3, 3, 3, 3)
+        Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
         Me.TabPage2.Size = New System.Drawing.Size(182, 265)
         Me.TabPage2.TabIndex = 1
         Me.TabPage2.Text = "Project"
@@ -430,6 +430,13 @@ Partial Class CodePad
         Me.ProjectToolStripMenuItem.Size = New System.Drawing.Size(56, 20)
         Me.ProjectToolStripMenuItem.Text = "Project"
         '
+        'ExecuteToolStripMenuItem
+        '
+        Me.ExecuteToolStripMenuItem.Image = Global.maththing.My.Resources.Resources.exec_button
+        Me.ExecuteToolStripMenuItem.Name = "ExecuteToolStripMenuItem"
+        Me.ExecuteToolStripMenuItem.Size = New System.Drawing.Size(160, 30)
+        Me.ExecuteToolStripMenuItem.Text = "Execute"
+        '
         'ToolsToolStripMenuItem
         '
         Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem1})
@@ -491,18 +498,11 @@ Partial Class CodePad
         Me.codeTab.Controls.Add(Me.codeRTB)
         Me.codeTab.Location = New System.Drawing.Point(4, 22)
         Me.codeTab.Name = "codeTab"
-        Me.codeTab.Padding = New System.Windows.Forms.Padding(3, 3, 3, 3)
+        Me.codeTab.Padding = New System.Windows.Forms.Padding(3)
         Me.codeTab.Size = New System.Drawing.Size(533, 265)
         Me.codeTab.TabIndex = 0
         Me.codeTab.Text = "Untitled"
         Me.codeTab.UseVisualStyleBackColor = True
-        '
-        'ExecuteToolStripMenuItem
-        '
-        Me.ExecuteToolStripMenuItem.Image = Global.maththing.My.Resources.Resources.exec_button
-        Me.ExecuteToolStripMenuItem.Name = "ExecuteToolStripMenuItem"
-        Me.ExecuteToolStripMenuItem.Size = New System.Drawing.Size(160, 30)
-        Me.ExecuteToolStripMenuItem.Text = "Execute"
         '
         'CodePad
         '

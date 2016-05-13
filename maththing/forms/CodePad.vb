@@ -71,12 +71,10 @@
         Next
 
         'Load special variables
-        For Each line As String In IO.File.ReadAllLines("lang\sv.txt")
-            Syntax.svList.Add(line)
-        Next
-
-        For Each line As String In IO.File.ReadAllLines("lang\svl.txt")
-            Syntax.svlList.Add(line)
+        For x = 0 To IO.File.ReadAllLines("lang\sv.txt").Length - 1
+            Dim svL As List(Of String) = IO.File.ReadAllLines("lang\sv.txt").ToList
+            Dim svlL As List(Of String) = IO.File.ReadAllLines("lang\svl.txt").ToList
+            Variables.svList.Add(svL.Item(x), svlL.Item(x))
         Next
 
         'Load class variables
@@ -117,7 +115,7 @@
                 Next
 
                 'Special variables
-                For Each word As String In Syntax.svList
+                For Each word As String In Variables.svList.Keys
                     Dim pos As Integer = 0
                     Do While codeRTB.Text.ToUpper.IndexOf(word.ToUpper, pos) >= 0
                         pos = codeRTB.Text.ToUpper.IndexOf(word.ToUpper, pos)
@@ -164,7 +162,8 @@
 
                 Dim line As String = codeRTB.Lines(i)
                 If waitLines = 0 Then
-
+                    line.Replace(",", My.Settings.decimalSeparator)
+                    line.Replace(".", My.Settings.decimalSeparator)
                     Try
                             Dim cmd As String = getCmd(line).ToString.ToLower
                             Dim arg As String
@@ -301,9 +300,8 @@
         Else
             If Syntax.opList.Contains(arg) Then
                 Return arg
-            ElseIf Syntax.svList.Contains(arg) Then
-                Dim indexNum As Integer = Syntax.svList.IndexOf(arg)
-                Return Syntax.svlList.Item(indexNum).Replace(",", My.Settings.decimalSeparator)
+            ElseIf variables.svList.ContainsKey(arg) Then
+                Return Variables.svList.Item(arg).Replace(",", My.Settings.decimalSeparator)
             Else
                 Return Variables.VarList.Item(arg)
             End If
@@ -413,7 +411,7 @@
             Dim cmd As String = getCmd(line)
             Dim oArg As String = findArgs(line).replace("[input]", sArg)
             Dim cArg As List(Of String) = getArgs(oArg)
-            execCommand(cmd, cArg, oArg) 'Create execCommand specific for classes
+            execCommand(cmd, cArg, oArg) 'Create execCommand specific for classes since not all commands are compatible
         Next
     End Sub
 
@@ -610,5 +608,9 @@
     Private Sub ExecuteToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExecuteToolStripMenuItem.Click
         isExecuting = True
         execLoop()
+    End Sub
+
+    Private Sub ToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem1.Click
+        Options.Show()
     End Sub
 End Class
