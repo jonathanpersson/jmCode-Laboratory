@@ -165,16 +165,16 @@
                     line.Replace(",", My.Settings.decimalSeparator)
                     line.Replace(".", My.Settings.decimalSeparator)
                     Try
-                            Dim cmd As String = getCmd(line).ToString.ToLower
-                            Dim arg As String
-                            Dim argList As New List(Of String)
+                        Dim cmd As String = getCmd(line).ToString.ToLower.Replace(" ", "")
+                        Dim arg As String
+                        Dim argList As New List(Of String)
 
-                            If cmd = "endloop" Then
+                        If cmd = "endloop" Then
 
-                            Else
-                                arg = findArgs(line)
-                                argList = getArgs(arg)
-                            End If
+                        Else
+                            arg = findArgs(line)
+                            argList = getArgs(arg.Replace(" ", ""))
+                        End If
 
                             If cmd = "loop" Then loopStartIndex = i
 
@@ -226,7 +226,7 @@
     Private Function findArgs(ByVal line As String)
         Dim startPos As Integer = InStr(line, Syntax.lineStarter)
         Dim endPos As Integer = InStr(line, Syntax.lineEnder)
-        Dim arg As String = Mid(line, startPos + 1, endPos - startPos - 1).Replace(" ", "")
+        Dim arg As String = Mid(line, startPos + 1, endPos - startPos - 1)
         Return arg
     End Function
 
@@ -239,7 +239,7 @@
             Case "def"
                 def(arg)
             Case "calc"
-                Print(oArg & " = " & calc(arg))
+                Print(oArg.Replace(" ", "") & " = " & calc(arg))
             Case "sqrt"
                 sqrt(arg)
             Case "loop" 'Start loop
@@ -247,13 +247,17 @@
             Case "function"
                 defFunc(arg)
             Case "skip"
-                waitLines = oArg
+                waitLines = oArg.Replace(" ", "")
             Case "set"
                 setVar(arg)
             Case "class"
 
             Case "import"
-                importClass(oArg)
+                importClass(oArg.Replace(" ", ""))
+            Case "print"
+                Print(getNum(arg.Item(0)))
+            Case "printl"
+                Print(getString(oArg))
             Case Else
                 If funcList.ContainsKey(cmd) = True Then
                     getFunc(cmd, arg)
@@ -264,6 +268,12 @@
                 End If
         End Select
     End Sub
+
+    Private Function getString(ByVal oArg As String)
+        Dim startPos As Integer = oArg.IndexOf(""""c)
+        Dim endPos As Integer = oArg.LastIndexOf(""""c)
+        Return Mid(oArg, startPos + 2, endPos - startPos - 1)
+    End Function
 
     Private Function getArgs(ByVal arg As String) 'This is the 'new and improved' getArgs function
         Dim argList As New List(Of String)
