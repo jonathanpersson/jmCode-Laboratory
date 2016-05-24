@@ -58,7 +58,7 @@ Partial Class About
         Me.appVerLabel.Name = "appVerLabel"
         Me.appVerLabel.Size = New System.Drawing.Size(157, 13)
         Me.appVerLabel.TabIndex = 2
-        Me.appVerLabel.Text = "Application Version: Alpha 0.3.3"
+        Me.appVerLabel.Text = "Application Version: Alpha 0.3.4"
         '
         'langVerLabel
         '
@@ -67,7 +67,7 @@ Partial Class About
         Me.langVerLabel.Name = "langVerLabel"
         Me.langVerLabel.Size = New System.Drawing.Size(123, 13)
         Me.langVerLabel.TabIndex = 3
-        Me.langVerLabel.Text = "Language Version: 0.2.5"
+        Me.langVerLabel.Text = "Language Version: 0.2.6"
         '
         'Label2
         '

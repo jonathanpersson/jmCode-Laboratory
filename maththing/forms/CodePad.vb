@@ -14,11 +14,12 @@
     Dim loopStartIndex As Long = 0
 
     Private Sub CodePad_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        'Do normal startup stuff
         If My.Settings.askOnStart = True Then
             setDecimalSep.ShowDialog()
         End If
         loadSyntax()
-        'setTheme()
+        setTheme()
         getCodeStats()
         highlightSyntax()
         stopExecBtn.Visible = False
@@ -38,9 +39,11 @@
         End Try
     End Sub
 
-    Private Sub setTheme()
+    Public Sub setTheme()
         BackColor = Syntax.uiColor
+        ForeColor = Syntax.fgColor
         MenuStrip1.BackColor = Syntax.uiColor
+        MenuStrip1.ForeColor = Syntax.fgColor
         ToolStrip1.BackColor = Syntax.uiColor
         codeRTB.BackColor = Syntax.bgColor
     End Sub
@@ -89,7 +92,7 @@
             If codeRTB.Text.Length > 0 Then
                 Dim selectStart As Integer = codeRTB.SelectionStart
                 codeRTB.Select(0, codeRTB.TextLength)
-                codeRTB.SelectionColor = Color.Black
+                codeRTB.SelectionColor = Syntax.fgColor
                 codeRTB.DeselectAll()
 
                 'Keywords

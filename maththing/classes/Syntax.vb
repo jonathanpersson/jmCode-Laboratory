@@ -15,10 +15,6 @@
     Public Shared svlList As New List(Of String)
     Public Shared svColor As Color = Color.Red
 
-    'Comments
-    Public Shared commentStart As String = "//"
-    Public Shared commentColor As Color = Color.Green
-
     'Class variables
     Public Shared classVar As New List(Of String)
     Public Shared classVarColor As Color = Color.Magenta
@@ -30,9 +26,9 @@
     Public Shared lineEnder As Char = ";"
     Public Shared delStr As String = "|DELETE|"
 
-    'Other theme things
+    'Other theme things - move to theme class later
     Public Shared bgColor As Color = Color.White
-    Public Shared fgColor As Color = Color.White
-    Public Shared uiColor As Color = Color.LightGray
+    Public Shared fgColor As Color = Color.Black
+    Public Shared uiColor As Color = Color.FromName("Control")
     Public Shared doHighlightning As Boolean = True
 End Class

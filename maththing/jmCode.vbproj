@@ -148,15 +148,15 @@
     <Compile Include="forms\SaveFile.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Project.vb" />
-    <Compile Include="setDecimalSep.Designer.vb">
+    <Compile Include="classes\Project.vb" />
+    <Compile Include="forms\setDecimalSep.Designer.vb">
       <DependentUpon>setDecimalSep.vb</DependentUpon>
     </Compile>
-    <Compile Include="setDecimalSep.vb">
+    <Compile Include="forms\setDecimalSep.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Syntax.vb" />
-    <Compile Include="Variables.vb" />
+    <Compile Include="classes\Syntax.vb" />
+    <Compile Include="classes\Variables.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="forms\About.resx">
@@ -177,7 +177,7 @@
     <EmbeddedResource Include="forms\SaveFile.resx">
       <DependentUpon>SaveFile.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="setDecimalSep.resx">
+    <EmbeddedResource Include="forms\setDecimalSep.resx">
       <DependentUpon>setDecimalSep.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
@@ -235,6 +235,7 @@
       <DefaultIcon>script file 512x.ico</DefaultIcon>
     </FileAssociation>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

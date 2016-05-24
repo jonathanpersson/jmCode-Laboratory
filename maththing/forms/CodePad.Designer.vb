@@ -215,6 +215,8 @@ Partial Class CodePad
         '
         'ToolStrip1
         '
+        Me.ToolStrip1.BackColor = System.Drawing.SystemColors.Control
+        Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(24, 24)
         Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.stopExecBtn, Me.ToolStripSeparator1})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 24)
@@ -247,6 +249,7 @@ Partial Class CodePad
         '
         'MenuStrip1
         '
+        Me.MenuStrip1.BackColor = System.Drawing.SystemColors.Control
         Me.MenuStrip1.ImageScalingSize = New System.Drawing.Size(24, 24)
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.EditToolStripMenuItem, Me.ViewToolStripMenuItem, Me.ProjectToolStripMenuItem, Me.ToolsToolStripMenuItem, Me.WindowToolStripMenuItem, Me.HelpToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
@@ -434,7 +437,7 @@ Partial Class CodePad
         '
         Me.ExecuteToolStripMenuItem.Image = Global.maththing.My.Resources.Resources.exec_button
         Me.ExecuteToolStripMenuItem.Name = "ExecuteToolStripMenuItem"
-        Me.ExecuteToolStripMenuItem.Size = New System.Drawing.Size(160, 30)
+        Me.ExecuteToolStripMenuItem.Size = New System.Drawing.Size(114, 22)
         Me.ExecuteToolStripMenuItem.Text = "Execute"
         '
         'ToolsToolStripMenuItem
@@ -447,7 +450,7 @@ Partial Class CodePad
         'ToolStripMenuItem1
         '
         Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(152, 22)
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(116, 22)
         Me.ToolStripMenuItem1.Text = "Options"
         '
         'WindowToolStripMenuItem
@@ -466,7 +469,7 @@ Partial Class CodePad
         'AboutToolStripMenuItem
         '
         Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
-        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
         Me.AboutToolStripMenuItem.Text = "About"
         '
         'HelpToolStripMenuItem1
@@ -474,7 +477,7 @@ Partial Class CodePad
         Me.HelpToolStripMenuItem1.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.IntroductionToJmCodeToolStripMenuItem})
         Me.HelpToolStripMenuItem1.Enabled = False
         Me.HelpToolStripMenuItem1.Name = "HelpToolStripMenuItem1"
-        Me.HelpToolStripMenuItem1.Size = New System.Drawing.Size(152, 22)
+        Me.HelpToolStripMenuItem1.Size = New System.Drawing.Size(107, 22)
         Me.HelpToolStripMenuItem1.Text = "Learn"
         '
         'IntroductionToJmCodeToolStripMenuItem
@@ -508,6 +511,7 @@ Partial Class CodePad
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.BackColor = System.Drawing.SystemColors.Control
         Me.ClientSize = New System.Drawing.Size(731, 506)
         Me.Controls.Add(Me.TabControl2)
         Me.Controls.Add(Me.VariablePanel)
