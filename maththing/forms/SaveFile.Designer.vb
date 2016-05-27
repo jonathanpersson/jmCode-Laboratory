@@ -54,7 +54,7 @@ Partial Class SaveFile
         'ComboBox1
         '
         Me.ComboBox1.FormattingEnabled = True
-        Me.ComboBox1.Items.AddRange(New Object() {".jmcode", ".txt"})
+        Me.ComboBox1.Items.AddRange(New Object() {".jmcode", ".jmlib", ".txt"})
         Me.ComboBox1.Location = New System.Drawing.Point(155, 32)
         Me.ComboBox1.Name = "ComboBox1"
         Me.ComboBox1.Size = New System.Drawing.Size(130, 21)

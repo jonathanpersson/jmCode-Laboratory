@@ -19,10 +19,22 @@
             setDecimalSep.ShowDialog()
         End If
         loadSyntax()
+        openNewTab()
         setTheme()
         getCodeStats()
         highlightSyntax()
         stopExecBtn.Visible = False
+    End Sub
+
+    Private Sub openNewTab()
+        Dim cRTB As New RichTextBox
+        TabControl2.TabPages.Add(1, "Untitled")
+        TabControl2.SelectTab(TabControl2.TabPages.Count - 1)
+        cRTB.Name = "codeRTB"
+        cRTB.Dock = DockStyle.Fill
+        cRTB.BorderStyle = BorderStyle.None
+        TabControl2.SelectedTab.Controls.Add(cRTB)
+        AddHandler cRTB.TextChanged, AddressOf cRTBTextChange
     End Sub
 
     Private Sub openScript()
@@ -30,12 +42,20 @@
             Dim openFile As New OpenFileDialog
             openFile.Filter = "jmCode Script Files *.jmcode | *.jmcode"
             If openFile.ShowDialog = DialogResult.OK Then
-                codeRTB.Text = IO.File.ReadAllText(openFile.FileName)
-                Project.saveLoc = openFile.FileName
-                codeTab.Text = openFile.FileName
+                CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).Text = IO.File.ReadAllText(openFile.FileName)
+
+                If Project.saveLocs.ContainsKey(TabControl2.SelectedTab.Text) Then
+                    Project.saveLocs.Remove(TabControl2.SelectedTab.Text)
+                End If
+
+                Dim fileNmIndex As Integer = openFile.FileName.LastIndexOf("\")
+                Dim fileName As String = openFile.FileName.Substring(fileNmIndex + 1, openFile.FileName.Length - fileNmIndex - 1)
+
+                Project.saveLocs.Add(fileName, openFile.FileName)
+                TabControl2.SelectedTab.Text = fileName
             End If
         Catch ex As Exception
-            MsgBox("Something happened. (Dev note: add proper message later).")
+            MsgBox(ex.Message)
         End Try
     End Sub
 
@@ -45,16 +65,11 @@
         MenuStrip1.BackColor = Syntax.uiColor
         MenuStrip1.ForeColor = Syntax.fgColor
         ToolStrip1.BackColor = Syntax.uiColor
-        codeRTB.BackColor = Syntax.bgColor
-    End Sub
-
-    Private Sub RichTextBox1_TextChanged(sender As Object, e As EventArgs) Handles codeRTB.TextChanged
-        highlightSyntax()
-        getCodeStats()
+        CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).BackColor = Syntax.bgColor
     End Sub
 
     Private Sub getCodeStats()
-        lineCountLabel.Text = "Lines: " & codeRTB.Lines.Count & " Characters: " & codeRTB.Text.Length
+        lineCountLabel.Text = "Lines: " & CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).Lines.Count & " Characters: " & CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).Text.Length
     End Sub
 
     Private Sub loadSyntax()
@@ -89,19 +104,19 @@
     Private Sub highlightSyntax() 'Rewrite this
         If Syntax.doHighlightning = True Then
 
-            If codeRTB.Text.Length > 0 Then
-                Dim selectStart As Integer = codeRTB.SelectionStart
-                codeRTB.Select(0, codeRTB.TextLength)
-                codeRTB.SelectionColor = Syntax.fgColor
-                codeRTB.DeselectAll()
+            If CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).Text.Length > 0 Then
+                Dim selectStart As Integer = CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).SelectionStart
+                CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).Select(0, CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).TextLength)
+                CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).SelectionColor = Syntax.fgColor
+                CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).DeselectAll()
 
                 'Keywords
                 For Each word As String In Syntax.commandList
                     Dim pos As Integer = 0
-                    Do While codeRTB.Text.ToUpper.IndexOf(word.ToUpper, pos) >= 0
-                        pos = codeRTB.Text.ToUpper.IndexOf(word.ToUpper, pos)
-                        codeRTB.Select(pos, word.Length)
-                        codeRTB.SelectionColor = Syntax.commandColor
+                    Do While CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).Text.ToUpper.IndexOf(word.ToUpper, pos) >= 0
+                        pos = CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).Text.ToUpper.IndexOf(word.ToUpper, pos)
+                        CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).Select(pos, word.Length)
+                        CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).SelectionColor = Syntax.commandColor
                         pos += 1
                     Loop
                 Next
@@ -109,10 +124,10 @@
                 'Functions
                 For Each word As String In Syntax.functionList
                     Dim pos As Integer = 0
-                    Do While codeRTB.Text.ToUpper.IndexOf(word.ToUpper, pos) >= 0
-                        pos = codeRTB.Text.ToUpper.IndexOf(word.ToUpper, pos)
-                        codeRTB.Select(pos, word.Length)
-                        codeRTB.SelectionColor = Syntax.functionColor
+                    Do While CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).Text.ToUpper.IndexOf(word.ToUpper, pos) >= 0
+                        pos = CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).Text.ToUpper.IndexOf(word.ToUpper, pos)
+                        CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).Select(pos, word.Length)
+                        CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).SelectionColor = Syntax.functionColor
                         pos += 1
                     Loop
                 Next
@@ -120,10 +135,10 @@
                 'Special variables
                 For Each word As String In Variables.svList.Keys
                     Dim pos As Integer = 0
-                    Do While codeRTB.Text.ToUpper.IndexOf(word.ToUpper, pos) >= 0
-                        pos = codeRTB.Text.ToUpper.IndexOf(word.ToUpper, pos)
-                        codeRTB.Select(pos, word.Length)
-                        codeRTB.SelectionColor = Syntax.svColor
+                    Do While CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).Text.ToUpper.IndexOf(word.ToUpper, pos) >= 0
+                        pos = CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).Text.ToUpper.IndexOf(word.ToUpper, pos)
+                        CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).Select(pos, word.Length)
+                        CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).SelectionColor = Syntax.svColor
                         pos += 1
                     Loop
                 Next
@@ -131,16 +146,16 @@
                 'Class variables
                 For Each word As String In Syntax.classVar
                     Dim pos As Integer = 0
-                    Do While codeRTB.Text.ToUpper.IndexOf(word.ToUpper, pos) >= 0
-                        pos = codeRTB.Text.ToUpper.IndexOf(word.ToUpper, pos)
-                        codeRTB.Select(pos, word.Length)
-                        codeRTB.SelectionColor = Syntax.classVarColor
+                    Do While CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).Text.ToUpper.IndexOf(word.ToUpper, pos) >= 0
+                        pos = CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).Text.ToUpper.IndexOf(word.ToUpper, pos)
+                        CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).Select(pos, word.Length)
+                        CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).SelectionColor = Syntax.classVarColor
                         pos += 1
                     Loop
                 Next
 
-                codeRTB.SelectionStart = selectStart
-                codeRTB.DeselectAll()
+                CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).SelectionStart = selectStart
+                CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).DeselectAll()
             End If
         End If
     End Sub
@@ -152,18 +167,19 @@
     Private Sub execLoop() 'Main loop for the interpreter, this wil read code line by line and execute it.
         stopExecBtn.Visible = True
 
-        Print("STARTING CODE EXECUTION")
-
         'Clear variable listbox
         varLB.Items.Clear()
+        consoleTB.Clear()
+
+        Print("STARTING CODE EXECUTION")
 
         While isExecuting = True 'Rewrite this a bit
-            For i = 0 To codeRTB.Lines.Count - 1
+            For i = 0 To CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).Lines.Count - 1
                 Application.DoEvents()
 
-                If isExecuting = False Then i = codeRTB.Lines.Count - 1
+                If isExecuting = False Then i = CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).Lines.Count - 1
 
-                Dim line As String = codeRTB.Lines(i)
+                Dim line As String = CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).Lines(i)
                 If waitLines = 0 Then
                     line.Replace(",", My.Settings.decimalSeparator)
                     line.Replace(".", My.Settings.decimalSeparator)
@@ -179,46 +195,49 @@
                             argList = getArgs(arg.Replace(" ", ""))
                         End If
 
-                            If cmd = "loop" Then loopStartIndex = i
+                        If cmd = "loop" Then loopStartIndex = i
 
-                            If isLooping = True Then
-                                If cmd = "endloop" Then
-                                    loopCycles -= 1
-                                    If loopCycles = 0 Then
-                                        isLooping = False
-                                    Else
-                                        i = loopStartIndex
-                                    End If
+                        If isLooping = True Then
+                            If cmd = "endloop" Then
+                                loopCycles -= 1
+                                If loopCycles = 0 Then
+                                    isLooping = False
                                 Else
+                                    i = loopStartIndex
+                                End If
+                            Else
                                 execCommand(cmd, argList, arg)
                             End If
-                            Else
+                        Else
                             execCommand(cmd, argList, arg)
                         End If
-                        Catch ex As Exception
-                            Print("[ERROR] Invalid syntax on line " & i + 1 & "! Skipping line...")
-                            Print("[ERROR - VB OUTPUT] " & ex.Message)
-                            'ADD : Option to push VB errors as message boxes.
-                        End Try
-                    Else
-                        waitLines -= 1
+                    Catch ex As Exception
+                        Print("[ERROR] Invalid syntax on line " & i + 1 & "! Skipping line...")
+                        Print("[ERROR - VB OUTPUT] " & ex.Message)
+                        'ADD : Option to push VB errors as message boxes.
+                    End Try
+                Else
+                    waitLines -= 1
                 End If
             Next
             isExecuting = False
         End While
 
-        'Clear variables
-        Variables.VarList.Clear()
-
-        'Clear functions
-        funcList.Clear()
-
-        'Clear classes
-        classList.Clear()
+        clearVariables()
 
         Print("CODE EXECUTION FINISHED")
 
         stopExecBtn.Visible = False
+    End Sub
+
+    Private Sub clearVariables()
+        Variables.VarList.Clear()
+        Variables.boolList.Clear()
+        Variables.stringList.Clear()
+        classList.Clear()
+        funcList.Clear()
+        waitLines = 0
+        isLooping = False
     End Sub
 
     Private Function getCmd(ByVal line As String)
@@ -239,12 +258,10 @@
 
         'Identify command and do thing
         Select Case cmd
-            Case "def"
-                def(arg)
+            Case "def", "var"
+                defVar(arg)
             Case "calc"
                 Print(oArg.Replace(" ", "") & " = " & calc(arg))
-            Case "sqrt"
-                sqrt(arg)
             Case "loop" 'Start loop
                 doLoop(arg)
             Case "function"
@@ -260,7 +277,22 @@
             Case "print"
                 Print(getNum(arg.Item(0)))
             Case "printl"
-                Print(getString(oArg))
+                If oArg.Contains(""""c) Then
+                    Print(getString(oArg))
+                Else
+                    Dim itm As String = oArg.Replace(" ", "")
+                    If Variables.stringList.ContainsKey(itm) Then
+                        Print(Variables.stringList.Item(itm))
+                    Else
+                        Print("[ERROR] String variable: '" & oArg & "' could not be found!")
+                    End If
+                End If
+                    Case "bool"
+                defBool(arg)
+            Case "string"
+                defString(arg, oArg)
+            Case "library"
+
             Case Else
                 If funcList.ContainsKey(cmd) = True Then
                     getFunc(cmd, arg)
@@ -340,7 +372,7 @@
         Return finalNum
     End Function
 
-    Private Sub def(ByVal arg As List(Of String)) 'rewrite this to support inputting equations.
+    Private Sub defVar(ByVal arg As List(Of String))
         Dim var As String = arg.Item(0)
         If Variables.VarList.ContainsKey(var) Then
             Print("[ERROR] Variable '" & var & "' already exists. Skipping line...")
@@ -356,6 +388,29 @@
             End If
             varLB.Items.Add(var & " = " & Variables.VarList.Item(var))
         End If
+    End Sub
+
+    Private Sub defBool(ByVal arg As List(Of String))
+        Dim value As Boolean = False
+
+        If arg.Item(2).ToLower = "true" Then
+            value = True
+        ElseIf arg.Item(2).ToLower = "false" Then
+            value = False
+        ElseIf arg.Item(2) = 1 Then
+            value = True
+        ElseIf arg.Item(2) = 0 Then
+            value = False
+        End If
+
+        Variables.boolList.Add(arg.Item(0), value)
+        Print(value)
+    End Sub
+
+    Private Sub defString(ByVal arg As List(Of String), ByVal oArg As String)
+        Dim str As String = getString(oArg)
+        Variables.stringList.Add(arg.Item(0), str)
+        Print("'" & arg.Item(0) & "' = '" & str & "'")
     End Sub
 
     Private Sub setVar(ByVal arg As List(Of String)) 'Fix this
@@ -406,6 +461,12 @@
         Else
             Print("[ERROR] Failed to add class ' " & Arg & "'! No className is declared. Skipping line...")
         End If
+    End Sub
+
+    Private Sub importLibrary(ByVal oArg As String)
+        For Each line As String In IO.File.ReadAllLines(oArg)
+            importClass(line)
+        Next
     End Sub
 
     Private Sub useClass(ByVal className As String, ByVal arg As List(Of String))
@@ -493,13 +554,7 @@
         Return arg.Item(0)
     End Function
 
-    Private Sub sqrt(ByVal arg As List(Of String))
-        Dim num As Double = getNum(arg.Item(0))
-
-        Print("sqrt: " & num & "; = " & Math.Sqrt(num))
-    End Sub
-
-    Private Sub defFunc(ByVal arg As List(Of String)) 'Thou who art undead, art chosen.
+    Private Sub defFunc(ByVal arg As List(Of String)) 'Obsolete, use classes.
         Dim funcName As String = arg.Item(0)
         Dim argStr As String = ""
 
@@ -515,11 +570,16 @@
         Print("Added function '" & funcName & "'!")
     End Sub
 
-    Private Sub getFunc(ByVal cmd As String, ByVal arg As List(Of String)) 'I know...
+    Private Sub getFunc(ByVal cmd As String, ByVal arg As List(Of String)) 'Obsolete, use classes.
         Dim funcArg As String = funcList.Item(cmd)
         Dim argNum As Double = arg.Item(0)
         funcArg = funcArg.Replace("_", argNum.ToString)
         Print("[" & cmd & "] " & funcArg & " = " & calc(getArgs(funcArg)))
+    End Sub
+
+    Private Sub cRTBTextChange()
+        highlightSyntax()
+        getCodeStats()
     End Sub
 
     Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
@@ -548,9 +608,9 @@
         Else
             Syntax.doHighlightning = False
             SyntaxHighlightningToolStripMenuItem.Checked = False
-            codeRTB.SelectAll()
-            codeRTB.SelectionColor = Color.Black
-            codeRTB.DeselectAll()
+            CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).SelectAll()
+            CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).SelectionColor = Color.Black
+            CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).DeselectAll()
         End If
     End Sub
 
@@ -569,7 +629,7 @@
     End Sub
 
     Private Sub JmCodeScriptFileToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles JmCodeScriptFileToolStripMenuItem.Click
-        codeRTB.Clear()
+        openNewTab()
         Project.saveLoc = ""
     End Sub
 
@@ -577,45 +637,40 @@
         If Project.saveLoc = "" Then
             SaveFile.Show()
         Else
-            codeRTB.SaveFile(Project.saveLoc, RichTextBoxStreamType.PlainText)
+            CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).SaveFile(Project.saveLocs.Item(TabControl2.SelectedTab.Text), RichTextBoxStreamType.PlainText)
         End If
     End Sub
 
     Private Sub UndoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles UndoToolStripMenuItem.Click
-        codeRTB.Undo()
+        CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).Undo()
     End Sub
 
     Private Sub RedoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RedoToolStripMenuItem.Click
-        codeRTB.Redo()
+        CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).Redo()
     End Sub
 
     Private Sub CutToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CutToolStripMenuItem.Click
-        codeRTB.Cut()
+        CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).Cut()
     End Sub
 
     Private Sub CopyToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CopyToolStripMenuItem.Click
-        codeRTB.Copy()
+        CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).Copy()
     End Sub
 
     Private Sub PasteToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles PasteToolStripMenuItem.Click
-        codeRTB.Paste()
+        CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).Paste()
     End Sub
 
     Private Sub SelectAllToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SelectAllToolStripMenuItem.Click
-        codeRTB.SelectAll()
+        CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).SelectAll()
     End Sub
 
     Private Sub DeselectAllToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeselectAllToolStripMenuItem.Click
-        codeRTB.DeselectAll()
+        CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).DeselectAll()
     End Sub
 
     Private Sub ClearToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ClearToolStripMenuItem.Click
-        codeRTB.Clear()
-    End Sub
-
-    Private Sub WindowToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles WindowToolStripMenuItem1.Click
-        Dim wind As New CodePad
-        wind.Show()
+        CType(TabControl2.SelectedTab.Controls.Item(0), RichTextBox).Clear()
     End Sub
 
     Private Sub ExecuteToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExecuteToolStripMenuItem.Click
@@ -625,5 +680,19 @@
 
     Private Sub ToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem1.Click
         Options.Show()
+    End Sub
+
+    Private Sub LibrariesToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LibrariesToolStripMenuItem.Click
+        Library_Browser.Show()
+    End Sub
+
+    Private Sub CloseToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CloseToolStripMenuItem.Click
+        TabControl2.TabPages.RemoveAt(TabControl2.SelectedIndex)
+        TabControl2.SelectTab(TabControl2.TabPages.Count - 1)
+    End Sub
+
+    Private Sub OpenNewToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OpenNewToolStripMenuItem.Click
+        openNewTab()
+        openScript()
     End Sub
 End Class

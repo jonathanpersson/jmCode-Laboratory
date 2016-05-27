@@ -6,9 +6,10 @@
 
     Private Sub Save()
         Try
-            CodePad.codeRTB.SaveFile(saveDirTB.Text & "\" & projNameTB.Text & ComboBox1.SelectedItem,
+            Dim saveLocation As String = saveDirTB.Text & "\" & projNameTB.Text & ComboBox1.SelectedItem
+            CType(CodePad.TabControl2.SelectedTab.Controls.Item(0), RichTextBox).SaveFile(saveLocation,
                                      RichTextBoxStreamType.PlainText)
-            Project.saveLoc = saveDirTB.Text & "\" & projNameTB.Text & ComboBox1.SelectedItem
+            Project.saveLocs.Add(projNameTB.Text & ComboBox1.SelectedItem, saveLocation)
         Catch
 
         End Try
@@ -27,7 +28,7 @@
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         Save()
-        CodePad.codeTab.Text = saveDirTB.Text & "\" & projNameTB.Text & ComboBox1.SelectedItem
+        CodePad.TabControl2.SelectedTab.Text = projNameTB.Text & ComboBox1.SelectedItem
         Close()
     End Sub
 

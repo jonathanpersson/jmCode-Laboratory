@@ -25,7 +25,6 @@ Partial Class CodePad
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CodePad))
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
         Me.lineCountLabel = New System.Windows.Forms.ToolStripStatusLabel()
-        Me.codeRTB = New System.Windows.Forms.RichTextBox()
         Me.ConsolePanel = New System.Windows.Forms.Panel()
         Me.TabControl3 = New System.Windows.Forms.TabControl()
         Me.TabPage4 = New System.Windows.Forms.TabPage()
@@ -44,13 +43,14 @@ Partial Class CodePad
         Me.NewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.JmCodeProjectToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.JmCodeScriptFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.WindowToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OpenExecuteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.SaveToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SaveAsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
+        Me.CloseToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator7 = New System.Windows.Forms.ToolStripSeparator()
         Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.UndoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -70,13 +70,14 @@ Partial Class CodePad
         Me.ExecuteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.LibrariesToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.WindowToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.HelpToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.IntroductionToJmCodeToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TabControl2 = New System.Windows.Forms.TabControl()
-        Me.codeTab = New System.Windows.Forms.TabPage()
+        Me.OpenNewToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.StatusStrip1.SuspendLayout()
         Me.ConsolePanel.SuspendLayout()
         Me.TabControl3.SuspendLayout()
@@ -86,8 +87,6 @@ Partial Class CodePad
         Me.TabPage1.SuspendLayout()
         Me.ToolStrip1.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
-        Me.TabControl2.SuspendLayout()
-        Me.codeTab.SuspendLayout()
         Me.SuspendLayout()
         '
         'StatusStrip1
@@ -105,19 +104,6 @@ Partial Class CodePad
         Me.lineCountLabel.Name = "lineCountLabel"
         Me.lineCountLabel.Size = New System.Drawing.Size(31, 17)
         Me.lineCountLabel.Text = "lines"
-        '
-        'codeRTB
-        '
-        Me.codeRTB.BorderStyle = System.Windows.Forms.BorderStyle.None
-        Me.codeRTB.DetectUrls = False
-        Me.codeRTB.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.codeRTB.Font = New System.Drawing.Font("Consolas", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.codeRTB.Location = New System.Drawing.Point(3, 3)
-        Me.codeRTB.Name = "codeRTB"
-        Me.codeRTB.Size = New System.Drawing.Size(527, 259)
-        Me.codeRTB.TabIndex = 1
-        Me.codeRTB.Text = ""
-        Me.codeRTB.WordWrap = False
         '
         'ConsolePanel
         '
@@ -260,14 +246,14 @@ Partial Class CodePad
         '
         'FileToolStripMenuItem
         '
-        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewToolStripMenuItem, Me.OpenToolStripMenuItem, Me.OpenExecuteToolStripMenuItem, Me.ToolStripSeparator2, Me.SaveToolStripMenuItem, Me.SaveAsToolStripMenuItem, Me.ToolStripSeparator3, Me.ExitToolStripMenuItem})
+        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewToolStripMenuItem, Me.OpenToolStripMenuItem, Me.OpenNewToolStripMenuItem, Me.OpenExecuteToolStripMenuItem, Me.ToolStripSeparator2, Me.SaveToolStripMenuItem, Me.SaveAsToolStripMenuItem, Me.ToolStripSeparator3, Me.CloseToolStripMenuItem, Me.ToolStripSeparator7, Me.ExitToolStripMenuItem})
         Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
         Me.FileToolStripMenuItem.Size = New System.Drawing.Size(37, 20)
         Me.FileToolStripMenuItem.Text = "File"
         '
         'NewToolStripMenuItem
         '
-        Me.NewToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.JmCodeProjectToolStripMenuItem, Me.JmCodeScriptFileToolStripMenuItem, Me.WindowToolStripMenuItem1})
+        Me.NewToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.JmCodeProjectToolStripMenuItem, Me.JmCodeScriptFileToolStripMenuItem})
         Me.NewToolStripMenuItem.Name = "NewToolStripMenuItem"
         Me.NewToolStripMenuItem.Size = New System.Drawing.Size(186, 22)
         Me.NewToolStripMenuItem.Text = "New"
@@ -283,12 +269,6 @@ Partial Class CodePad
         Me.JmCodeScriptFileToolStripMenuItem.Name = "JmCodeScriptFileToolStripMenuItem"
         Me.JmCodeScriptFileToolStripMenuItem.Size = New System.Drawing.Size(156, 22)
         Me.JmCodeScriptFileToolStripMenuItem.Text = "jmCode Script"
-        '
-        'WindowToolStripMenuItem1
-        '
-        Me.WindowToolStripMenuItem1.Name = "WindowToolStripMenuItem1"
-        Me.WindowToolStripMenuItem1.Size = New System.Drawing.Size(156, 22)
-        Me.WindowToolStripMenuItem1.Text = "Window"
         '
         'OpenToolStripMenuItem
         '
@@ -327,6 +307,17 @@ Partial Class CodePad
         '
         Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
         Me.ToolStripSeparator3.Size = New System.Drawing.Size(183, 6)
+        '
+        'CloseToolStripMenuItem
+        '
+        Me.CloseToolStripMenuItem.Name = "CloseToolStripMenuItem"
+        Me.CloseToolStripMenuItem.Size = New System.Drawing.Size(186, 22)
+        Me.CloseToolStripMenuItem.Text = "Close Tab"
+        '
+        'ToolStripSeparator7
+        '
+        Me.ToolStripSeparator7.Name = "ToolStripSeparator7"
+        Me.ToolStripSeparator7.Size = New System.Drawing.Size(183, 6)
         '
         'ExitToolStripMenuItem
         '
@@ -442,7 +433,7 @@ Partial Class CodePad
         '
         'ToolsToolStripMenuItem
         '
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem1})
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripMenuItem1, Me.LibrariesToolStripMenuItem})
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
         Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(47, 20)
         Me.ToolsToolStripMenuItem.Text = "Tools"
@@ -450,8 +441,14 @@ Partial Class CodePad
         'ToolStripMenuItem1
         '
         Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(116, 22)
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(155, 22)
         Me.ToolStripMenuItem1.Text = "Options"
+        '
+        'LibrariesToolStripMenuItem
+        '
+        Me.LibrariesToolStripMenuItem.Name = "LibrariesToolStripMenuItem"
+        Me.LibrariesToolStripMenuItem.Size = New System.Drawing.Size(155, 22)
+        Me.LibrariesToolStripMenuItem.Text = "Library Browser"
         '
         'WindowToolStripMenuItem
         '
@@ -488,7 +485,6 @@ Partial Class CodePad
         '
         'TabControl2
         '
-        Me.TabControl2.Controls.Add(Me.codeTab)
         Me.TabControl2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TabControl2.Location = New System.Drawing.Point(0, 55)
         Me.TabControl2.Name = "TabControl2"
@@ -496,16 +492,11 @@ Partial Class CodePad
         Me.TabControl2.Size = New System.Drawing.Size(541, 291)
         Me.TabControl2.TabIndex = 6
         '
-        'codeTab
+        'OpenNewToolStripMenuItem
         '
-        Me.codeTab.Controls.Add(Me.codeRTB)
-        Me.codeTab.Location = New System.Drawing.Point(4, 22)
-        Me.codeTab.Name = "codeTab"
-        Me.codeTab.Padding = New System.Windows.Forms.Padding(3)
-        Me.codeTab.Size = New System.Drawing.Size(533, 265)
-        Me.codeTab.TabIndex = 0
-        Me.codeTab.Text = "Untitled"
-        Me.codeTab.UseVisualStyleBackColor = True
+        Me.OpenNewToolStripMenuItem.Name = "OpenNewToolStripMenuItem"
+        Me.OpenNewToolStripMenuItem.Size = New System.Drawing.Size(186, 22)
+        Me.OpenNewToolStripMenuItem.Text = "Open New"
         '
         'CodePad
         '
@@ -537,15 +528,12 @@ Partial Class CodePad
         Me.ToolStrip1.PerformLayout()
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
-        Me.TabControl2.ResumeLayout(False)
-        Me.codeTab.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
 
     Friend WithEvents StatusStrip1 As StatusStrip
-    Friend WithEvents codeRTB As RichTextBox
     Friend WithEvents lineCountLabel As ToolStripStatusLabel
     Friend WithEvents ConsolePanel As Panel
     Friend WithEvents VariablePanel As Panel
@@ -559,7 +547,6 @@ Partial Class CodePad
     Friend WithEvents FileToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents NewToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents JmCodeScriptFileToolStripMenuItem As ToolStripMenuItem
-    Friend WithEvents WindowToolStripMenuItem1 As ToolStripMenuItem
     Friend WithEvents OpenToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents OpenExecuteToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
@@ -592,10 +579,13 @@ Partial Class CodePad
     Friend WithEvents TabPage1 As TabPage
     Friend WithEvents TabPage2 As TabPage
     Friend WithEvents TabControl2 As TabControl
-    Friend WithEvents codeTab As TabPage
     Friend WithEvents TabControl3 As TabControl
     Friend WithEvents TabPage4 As TabPage
     Friend WithEvents JmCodeProjectToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ToolStripMenuItem1 As ToolStripMenuItem
     Friend WithEvents ExecuteToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents LibrariesToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents CloseToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ToolStripSeparator7 As ToolStripSeparator
+    Friend WithEvents OpenNewToolStripMenuItem As ToolStripMenuItem
 End Class
