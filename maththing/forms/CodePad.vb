@@ -14,16 +14,15 @@
     Dim loopStartIndex As Long = 0
 
     Private Sub CodePad_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        'Do normal startup stuff
-        If My.Settings.askOnStart = True Then
+        If My.Settings.askOnStart = True Then 'Checks if it should ask for decimal separator at startup
             setDecimalSep.ShowDialog()
         End If
-        loadSyntax()
-        openNewTab()
-        setTheme()
-        getCodeStats()
-        highlightSyntax()
-        stopExecBtn.Visible = False
+        loadSyntax() 'Loads syntax from files
+        openNewTab() 'Opens a new, empty tab
+        setTheme() 'Sets the UI theme
+        getCodeStats() 'Gets the current code stats
+        highlightSyntax() 'Highlights syntax
+        stopExecBtn.Visible = False 'Makes 'Stop Execution' button invisible
     End Sub
 
     Private Sub openNewTab()
@@ -257,6 +256,7 @@
         op = getOperator(oArg)
 
         'Identify command and do thing
+        'Probably make this prettier.
         Select Case cmd
             Case "def", "var"
                 defVar(arg)
@@ -292,7 +292,7 @@
             Case "string"
                 defString(arg, oArg)
             Case "library"
-
+                importLibrary(oArg)
             Case Else
                 If funcList.ContainsKey(cmd) = True Then
                     getFunc(cmd, arg)
@@ -517,9 +517,9 @@
 
             isLooping = True
 
-            Do While isLooping = True 'Check entire argument for operator
+            Do While isLooping = True 'Check entire argument for current operator
                 If arg.Item(i) = op Then
-                    If arg.Item(i - 1) = Syntax.delStr Then
+                    If arg.Item(i - 1) = Syntax.delStr Then 'Check if current part of arg is delStr
                         num1 = getNum(arg.Item(i - 2))
                     Else
                         num1 = getNum(arg.Item(i - 1))
